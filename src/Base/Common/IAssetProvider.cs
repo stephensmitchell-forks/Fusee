@@ -98,6 +98,15 @@ namespace Fusee.Base.Common
         object GetAsset(string id, Type type);
 
         /// <summary>
+        /// Retrieves the asset identified by the given string via HTTP.
+        /// </summary>
+        /// <param name="id">The identifier string.</param>
+        /// <param name="webUri">The Uri.</param>
+        /// <param name="type">The type of the asset.</param>
+        /// <returns>The asset, if this provider can akquire an asset with the given id and the given type. Ohterwise null.</returns>
+        object GetWebAsset(string id, string webUri, Type type);
+
+        /// <summary>
         /// Determines whether this asset provider can get the specified asset without actually getting it.
         /// </summary>
         /// <param name="id">The identifier string.</param>

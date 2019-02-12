@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 
 namespace Fusee.Base.Common
 {
@@ -77,6 +78,40 @@ namespace Fusee.Base.Common
             return null;
         }
 
+        /// <summary>
+        /// Retrieves the asset identified by the given string.
+        /// </summary>
+        /// <param name="id">The identifier string.</param>
+        /// <param name="type">The type of the asset.</param>
+        /// <returns>
+        /// The asset, if this provider can akquire an asset with the given id and the given type. Ohterwise null.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        public object GetWebAsset(string id, string webUri, Type type)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                using (Stream stream = wc.OpenRead(webUri))
+                {
+                    if (stream == null)
+                    {
+                        return null;
+                    }
+
+                    AssetHandler handler;
+                    if (_assetHandlers.TryGetValue(type, out handler))
+                    {
+                        object ret;
+                        if (null != (ret = handler.Decoder(id, stream)))
+                        {
+                            // Return in using will dispose the used object, which is what we want...
+                            return ret;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
 
         /// <summary>
         /// Determines whether this asset provider can get the specified asset without actually getting it.

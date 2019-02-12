@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Fusee.Base.Common;
 using Fusee.Serialization;
@@ -60,11 +61,29 @@ namespace Fusee.Base.Core
         /// </remarks>
         public T GetAsset<T>(string id)
         {
+            bool isWeb = false;
+            string webUri = id;
+
+            if (id.StartsWith("http://") || id.StartsWith("https://"))
+            {
+                isWeb = true;
+
+                string[] parts = id.Split('/');
+                id = parts[parts.Length - 1];
+            }
+
             foreach (var assetProvider in _providers)
             {
-                if (assetProvider.CanGet(id, typeof(T)))
+                if (isWeb)
                 {
-                    return (T)assetProvider.GetAsset(id, typeof(T));
+                    return (T)assetProvider.GetWebAsset(id, webUri, typeof(T));
+                }
+                else
+                {
+                    if (assetProvider.CanGet(id, typeof(T)))
+                    {
+                        return (T)assetProvider.GetAsset(id, typeof(T));
+                    }
                 }
             }
             return default(T);
