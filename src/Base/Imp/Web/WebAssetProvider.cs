@@ -113,6 +113,35 @@ namespace Fusee.Base.Imp.Web
             return null;
         }
 
+        /// <summary>
+        /// Retrieves the asset identified by the given string via HTTP.
+        /// </summary>
+        /// <param name="id">The identifier string.</param>
+        /// <param name="webUri">The uri.</param>
+        /// <param name="type">The type of the asset.</param>
+        /// <returns>
+        /// The asset, if this provider can akquire an asset with the given id and the given type. Ohterwise null.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        public object GetWebAsset(string id, string webUri, Type type)
+        {
+            object assetOb = GetRawWebAsset(webUri);
+            if (assetOb == null)
+            {
+                return null;
+            }
+
+            AssetHandler handler;
+            if (_assetHandlers.TryGetValue(type, out handler))
+            {
+                object ret;
+                if (null != (ret = handler.Decoder(id, assetOb)))
+                {
+                    return ret;
+                }
+            }
+            return null;
+        }
 
         /// <summary>
         /// Determines whether this asset provider can get the specified asset without actually getting it.
@@ -160,6 +189,17 @@ namespace Fusee.Base.Imp.Web
         /// <returns>Implementors should return true if a stream can be created.</returns>
         [JSExternal]
         private object GetRawAsset(string id)
+        {
+            throw new NotImplementedException("This method is implemented in JavaScript [JSExternal]");
+        }
+
+        /// <summary>
+        /// Checks the existance of the identified asset. Implement this on a given platform.
+        /// </summary>
+        /// <param name="id">The asset identifier.</param>
+        /// <returns>Implementors should return true if a stream can be created.</returns>
+        [JSExternal]
+        private object GetRawWebAsset(string id)
         {
             throw new NotImplementedException("This method is implemented in JavaScript [JSExternal]");
         }

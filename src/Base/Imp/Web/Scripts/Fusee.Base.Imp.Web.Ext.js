@@ -21,21 +21,39 @@ JSIL.ImplementExternals("Fusee.Base.Imp.Web.WebAssetProvider", function ($) {
         }
     );
 
-    // private object GetRawAsset(string id)
-    $.Method({ Static: false, Public: false }, "GetRawAsset",
-        new JSIL.MethodSignature($.Object, [$.String]),
-        function GetRawAsset(id) {
-            var idName = "assets/" + id.toLowerCase();
-            var idNoExt = idName.substring(0, idName.lastIndexOf("."));
-            if (allFiles.hasOwnProperty(idName))
-                return allFiles[idName];
+	// private object GetRawAsset(string id)
+	$.Method({ Static: false, Public: false }, "GetRawAsset",
+		new JSIL.MethodSignature($.Object, [$.String]),
+		function GetRawAsset(id) {
+			var idName = "assets/" + id.toLowerCase();
+			var idNoExt = idName.substring(0, idName.lastIndexOf("."));
+			if (allFiles.hasOwnProperty(idName))
+				return allFiles[idName];
 
-            if (allAssets.hasOwnProperty(idNoExt))
-                return allAssets[idNoExt];
+			if (allAssets.hasOwnProperty(idNoExt))
+				return allAssets[idNoExt];
 
-            return null;
-        }
-    );
+			return null;
+		}
+	);
+
+	// private object GetRawWebAsset(string id)
+	$.Method({ Static: false, Public: false }, "GetRawWebAsset",
+		new JSIL.MethodSignature($.Object, [$.String]),
+		function GetRawWebAsset(id) {
+			var request = new XMLHttpRequest();
+			request.open('GET', id, false);
+			request.send();
+
+			console.log(id + " " + request.status);
+
+			if (request.status === 200) {
+				return request.response;
+			}
+
+			return null;
+		}
+	);
 
     // public static ImageData LoadImage(object assetOb)
     $.Method({ Static: true, Public: true }, "WrapImage",

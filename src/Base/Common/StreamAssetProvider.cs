@@ -79,9 +79,10 @@ namespace Fusee.Base.Common
         }
 
         /// <summary>
-        /// Retrieves the asset identified by the given string.
+        /// Retrieves the asset identified by the given string via HTTP.
         /// </summary>
         /// <param name="id">The identifier string.</param>
+        /// <param name="webUri">The uri.</param>
         /// <param name="type">The type of the asset.</param>
         /// <returns>
         /// The asset, if this provider can akquire an asset with the given id and the given type. Ohterwise null.
