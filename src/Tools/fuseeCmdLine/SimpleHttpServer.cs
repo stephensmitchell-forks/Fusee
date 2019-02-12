@@ -189,6 +189,8 @@ namespace Fusee.Tools.fuseeCmdLine
             outputStream.WriteLine("HTTP/1.0 200 OK");
             outputStream.WriteLine("Content-Type: " + content_type);
             outputStream.WriteLine("Access-Control-Allow-Origin: *");
+            outputStream.WriteLine("Cache-Control: no-cache, no-store, must-revalidate");
+            outputStream.WriteLine("Clear-Site-Data: *");
             outputStream.WriteLine("Connection: close");
             outputStream.WriteLine("");
             outputStream.Flush();
