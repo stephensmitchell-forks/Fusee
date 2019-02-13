@@ -42,6 +42,11 @@ namespace Fusee.Base.Core
         public static AssetStorage Instance => _instance ?? (_instance = new AssetStorage());
 
         /// <summary>
+        /// Gets and sets the base path for all AssetStorage operations, this is especially important for loading textures for fus-files that are not located in the Assets folder.
+        /// </summary>
+        public static string BasePath { get; set; }
+
+        /// <summary>
         /// Staticton implementation of <see cref="GetAsset{T}"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -61,6 +66,8 @@ namespace Fusee.Base.Core
         /// </remarks>
         public T GetAsset<T>(string id)
         {
+            id = BasePath + id;
+
             bool isWeb = false;
             string webUri = id;
 
