@@ -40,7 +40,9 @@ namespace Fusee.Engine.Player.Web
                         if (Path.GetExtension(id).ToLower().Contains("fus"))
                         {
                             var ser = new Serializer();
-                            return new ConvertSceneGraph().Convert(ser.Deserialize(IO.StreamFromFile("Assets/" + id, FileMode.Open), null, typeof(SceneContainer)) as SceneContainer);
+                            System.IO.Stream stream = new System.IO.MemoryStream(System.Text.Encoding.ASCII.GetBytes((string)storage));
+                            //System.IO.Stream stream = IO.StreamFromFile("Assets/" + id, FileMode.Open);
+                            return new ConvertSceneGraph().Convert(ser.Deserialize(stream, null, typeof(SceneContainer)) as SceneContainer);
                         }
                         return null;
                     },
